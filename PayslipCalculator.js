@@ -1,6 +1,6 @@
 //input
-let earnings = 50000;
-let age = 75;
+let earnings = 20000;
+let age = 70;
 let currentPeriod = 1;
 let taxPeriods = 12;
 
@@ -17,7 +17,10 @@ let max = 0;
 let perc = 0;
 let base = 0
 let PAYE = 0;
+
 let UIF = 0;
+let UIFPerc = 0.01;
+let UIFCeiling = 177.12;
 
 //SARSBrackets
 let SARSBrackets = [
@@ -162,16 +165,37 @@ RebateAndThreshold();
 
 //Tax Calc from SARS rates
 function TaxCalc() {
-    console.log(annualise)
-    console.log("ageValue: " + ageValue)
+    console.log(annualise);
+    console.log("ageValue: " + ageValue);
     
-    PAYE = (annualise - min)
-    PAYE = PAYE * perc
-    PAYE = PAYE + base
-    PAYE = PAYE - ThresholdValue
-    PAYE = PAYE * currentPeriod / taxPeriods
+    PAYE = (annualise - min);
+    PAYE = PAYE * perc;
+    PAYE = PAYE + base;
+    PAYE = PAYE - ThresholdValue;
+    PAYE = PAYE * currentPeriod / taxPeriods;
 
-    console.log("PAYE: " + PAYE)
+    console.log("PAYE: " + PAYE);
 
 };
-TaxCalc()
+TaxCalc();
+
+function UIFCalc() {
+
+    UIF = earnings * UIFPerc;
+    
+    if (UIF > UIFCeiling) {
+        UIF = UIFCeiling
+    }
+
+    console.log("UIF: " + UIF);
+
+};
+UIFCalc();
+
+function Nett() {
+    var nett = 0
+    nett = earnings - (PAYE + UIF)
+    console.log("nett: " + nett);
+
+};
+Nett();

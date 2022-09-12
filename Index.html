@@ -8,23 +8,34 @@
     <link rel ="stylesheet" href="Style.css">
 </head>
 <body>
+    <form action="/url" method="GET">
     <header>
         <h1>Calculate my Payslip :-)</h1>
         <!-- <img src="URL" alt="descriptive text"> -->
     </header>
 
     <section id="Calculator">
-        <input type="Earnings" id="input-earning" />
+        <p><label for="Gross Earnings">Gross Earnings:</label></p>
+        <input type="text" id="Gross Earnings" name="Gross Earnings" placeholder="Please enter your earnings">
+    </section>
+
+    <section id="Calculator">
+        <p><label for="Age">Age:</label></p>
+        <input type="text" id="Age" name="Age" placeholder="Please enter your age">
         <div id="Earnings">
-            <button id="Earnings">blah</button>
+            <p><button id="Earnings">Calculate</button></p>
         </div>
     </section>
-<!-- 
+
     <section id="Results">
-        <h2 id="Calculation results"></h2>
+        <h2 id="Calculation results">Calculation Results:</h2>
+        <h2>PAYE: <span id="paye-result">0</span></h2>
+        <h2>UIF: <span id="uif-result">0</span></h2>
+        <h2>Nett pay: <span id="nettpay-result">0</span></h2>
     </section>
 
-    <script src="assets/scripts>PayslipCalculator.js"></script> -->
+    <script src="assets/scripts>PayslipCalculator.js"></script>
 
+</form>
 </body>
 </html>
