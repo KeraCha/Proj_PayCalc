@@ -1,6 +1,6 @@
 //input
-let earnings = 20000;
-let age = 70;
+let earnings = 0;
+let age = 0;
 let currentPeriod = 1;
 let taxPeriods = 12;
 
@@ -21,6 +21,9 @@ let PAYE = 0;
 let UIF = 0;
 let UIFPerc = 0.01;
 let UIFCeiling = 177.12;
+
+
+let nett = 0
 
 //SARSBrackets
 let SARSBrackets = [
@@ -84,7 +87,6 @@ function Annualisation() {
 
 };
 
-Annualisation();
 
 function Base() {
 
@@ -133,7 +135,6 @@ function Base() {
       console.log("base finale: " + base)
 }
 
-Base();
 
 function RebateAndThreshold() {
 
@@ -161,7 +162,6 @@ if (age >= 75) {
 
 };
 
-RebateAndThreshold();
 
 //Tax Calc from SARS rates
 function TaxCalc() {
@@ -174,10 +174,13 @@ function TaxCalc() {
     PAYE = PAYE - ThresholdValue;
     PAYE = PAYE * currentPeriod / taxPeriods;
 
+    if (PAYE < 0) {
+        PAYE = 0
+    }
+
     console.log("PAYE: " + PAYE);
 
 };
-TaxCalc();
 
 function UIFCalc() {
 
@@ -190,12 +193,28 @@ function UIFCalc() {
     console.log("UIF: " + UIF);
 
 };
-UIFCalc();
 
 function Nett() {
-    var nett = 0
+    
     nett = earnings - (PAYE + UIF)
     console.log("nett: " + nett);
 
 };
+
+function calculate() {
+ earnings = document.getElementById("GrossEarnings").value
+ age = document.getElementById("Age").value
+
+    
+Annualisation();
+Base();
+RebateAndThreshold();
+TaxCalc();
+UIFCalc();
 Nett();
+console.log("here")
+document.getElementById("paye-result").innerHTML = PAYE
+document.getElementById("nettpay_result").innerText = nett
+
+}
+//Calculate();
