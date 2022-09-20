@@ -1,10 +1,12 @@
 //input
-let earnings = 0;
-let age = 0;
-let currentPeriod = 1;
-let taxPeriods = 12;
+//let earnings = 20000;
+//let age = 25;
+//let gross_earnings = 0;
+let current_Period = 1;
+let tax_Periods = 12;
+let datastore = {"tax_Periods":12}
 
-let annualise = 0
+//let annualise = 0
 
 //SARS Thresholds
 let under65 = 91250;
@@ -65,11 +67,134 @@ let SARSBrackets = [
 ];
 //console.log(SARSBrackets[1])
 
+//Make a command that gets the user age and earnings into the calculation
+//this pulls the ui data entered
+// class GetUserInput {
+//     constructor(gross_earnings, age) {
+//       this.gross_earnings = gross_earnings;
+//       this.age = age;
+//     }
+//     getUserInput() {
+//         gross_earnings = document.getElementById(this.gross_earnings).value;
+//         age = document.getElementById(this.age).value;
+//     }
+//   }
+  
+//   //using this as the main input for calculations and classes
+//    let myuserinput = new GetUserInput(10000,25);
+//    console.log(myuserinput.gross_earnings, myuserinput.age)
+//    //the below sets the values from the above class into variables that can be used in the next class 
+//    //without the  myuseinput needing to be entered. better way? 
+//    //commenting it out for now to try find a better way 
+//    gross_earnings = myuserinput.gross_earnings
+//    age = myuserinput.age
+//    console.log(gross_earnings)
+//    console.log(age)
+
+class GetUserInput {
+    constructor(name) {
+      this.name = name;
+    }
+    execute() {
+        //console.log(this.name)
+        //console.log(document.getElementById(this.name).value)
+        datastore[this.name] = document.getElementById(this.name).value
+    }
+  }
+  
+//   //using this as the main input for calculations and classes
+//    let myuserinput = new GetUserInput(10000,25);
+//    console.log(myuserinput.gross_earnings, myuserinput.age)
+//    //the below sets the values from the above class into variables that can be used in the next class 
+//    //without the  myuseinput needing to be entered. better way? 
+//    //commenting it out for now to try find a better way 
+//    gross_earnings = myuserinput.gross_earnings
+//    age = myuserinput.age
+//    console.log(gross_earnings)
+//    console.log(age)
+
+  //Create class to replace Annualize function inputting the variables from the getUserInput class 
+//   class Annualization {
+//     constructor(gross_earnings, tax_Periods, current_Period, annual_gross) {
+//       this.gross_earnings = gross_earnings;
+//       this.tax_Periods = tax_Periods;
+//       this.current_Period = current_Period;
+//       this.annual_gross = annual_gross;
+//     }
+//     calcAnnualGross() {
+//         //let annual_gross = this.annual_gross
+//         return this.annual_gross = (datasore[this.gross_earnings] * this.tax_Periods / this.current_Period);
+//         //annual_gross = this.annual_gross
+//         //console.log(this.annual_gross);
+//     }
+//   }
+  
+//   let myAnnualGross = new Annualization(gross_earnings, tax_Periods, current_Period, 0);
+//   //console.log(myAnnualGross.gross_earnings, tax_Periods, current_Period, annual_gross)
+// console.log(myAnnualGross);
+// console.log(myAnnualGross.annual_gross);
+// console.log(myAnnualGross.calcAnnualGross());
+// myAnnualGross = myAnnualGross.calcAnnualGross()
+// console.log(myAnnualGross)
+
+    // calcSARSBrackets() {
+    //     for (option of SARSBrackets) {
+    //         //console.log(option);
+    //         if (annualise > option.Min && annualise < option.Max)  {
+    //             min = option.Min;
+    //             max = option.Max;
+    //             perc = option.Perc
+    //             console.log(option);
+    //         }
+    //     }
+    //     console.log(min);
+    //     console.log(max);
+
+
+      //Create class to replace Annualize function inputting the variables from the getUserInput class 
+  class Annualization {
+    constructor(annual_gross, gross_earnings, tax_Periods) {
+      this.gross_earnings = gross_earnings;
+      this.tax_Periods = tax_Periods;
+      this.annual_gross = annual_gross;
+    }
+    calcAnnualGross() {
+        //let annual_gross = this.annual_gross
+        datastore[this.annual_gross] = datastore[this.gross_earnings] * datastore[this.tax_Periods] ;
+        //annual_gross = this.annual_gross
+        //console.log(this.annual_gross);
+    };
+    calcSARSBrackets() {
+        for (var option of SARSBrackets) {
+            //console.log(option);
+            if (datastore[this.annual_gross] > option.Min && datastore[this.annual_gross] < option.Max)  {
+                min = option.Min;
+                max = option.Max;
+                perc = option.Perc
+                console.log(option);
+            }
+        }
+    }
+  };
+  
+  //let myAnnualGross = new Annualization(gross_earnings, tax_Periods, current_Period, 0);
+  //console.log(myAnnualGross.gross_earnings, tax_Periods, current_Period, annual_gross)
+// console.log(myAnnualGross);
+// console.log(myAnnualGross.annual_gross);
+// console.log(myAnnualGross.calcAnnualGross());
+// myAnnualGross = myAnnualGross.calcAnnualGross()
+// console.log(myAnnualGross)
+
+    
+        console.log(min);
+        console.log(max);
+
+    
 //Annualise earning and retrieve SARS tax bracket
 function Annualisation() {
     
-    annualise = (earnings * taxPeriods / currentPeriod)
-    console.log("annualise: " + earnings * taxPeriods / currentPeriod);
+    annualise = (gross_earnings * tax_Periods / current_Period)
+    console.log("annualise: " + gross_earnings * tax_Periods / current_Period);
 
     for (option of SARSBrackets) {
         //console.log(option);
@@ -85,7 +210,7 @@ function Annualisation() {
 
     //return Annualise;
 
-};
+}
 
 
 function Base() {
@@ -160,7 +285,7 @@ if (age >= 75) {
     console.log("ageValue: " + ageValue)
     console.log("ThresholdValue: " + ThresholdValue)
 
-};
+}
 
 
 //Tax Calc from SARS rates
@@ -172,7 +297,7 @@ function TaxCalc() {
     PAYE = PAYE * perc;
     PAYE = PAYE + base;
     PAYE = PAYE - ThresholdValue;
-    PAYE = PAYE * currentPeriod / taxPeriods;
+    PAYE = PAYE * current_Period / tax_Periods;
 
     if (PAYE < 0) {
         PAYE = 0
@@ -180,11 +305,11 @@ function TaxCalc() {
 
     console.log("PAYE: " + PAYE);
 
-};
+}
 
 function UIFCalc() {
 
-    UIF = earnings * UIFPerc;
+    UIF = gross_earnings * UIFPerc;
     
     if (UIF > UIFCeiling) {
         UIF = UIFCeiling
@@ -192,29 +317,39 @@ function UIFCalc() {
 
     console.log("UIF: " + UIF);
 
-};
+}
 
 function Nett() {
     
-    nett = earnings - (PAYE + UIF)
+    nett = gross_earnings - (PAYE + UIF)
     console.log("nett: " + nett);
 
-};
+}
+
+let test1 = new GetUserInput('GrossEarnings') //ID from the HTML
+let test2 = new GetUserInput('Age')
+let myAnnualGross = new Annualization('annualgross', 'GrossEarnings', "tax_Periods");
 
 function calculate() {
- earnings = document.getElementById("GrossEarnings").value
- age = document.getElementById("Age").value
-
     
-Annualisation();
+    // gross_earnings = document.getElementById("GrossEarnings").value
+    // age = document.getElementById("Age").value
+    test1.execute();
+    test2.execute();
+    myAnnualGross.calcAnnualGross();
+    myAnnualGross.calcSARSBrackets()
+    console.log(datastore);
+    
+//Annualisation();
 Base();
 RebateAndThreshold();
 TaxCalc();
 UIFCalc();
 Nett();
-console.log("here")
-document.getElementById("paye-result").innerHTML = PAYE
-document.getElementById("nettpay_result").innerText = nett
+console.log("here");
+document.getElementById("paye-result").innerHTML = PAYE;
+document.getElementById("uif-result").innerHTML = UIF;
+document.getElementById("nettpay_result").innerText = nett;
 
 }
-//Calculate();
+//Calculate()
