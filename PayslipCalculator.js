@@ -1,31 +1,28 @@
 //input
 //let earnings = 20000;
 //let age = 25;
-//let gross_earnings = 0;
-let current_Period = 1;
+//let gross_Earnings = 0;
+//let current_Period = 1;
 let tax_Periods = 12;
-let datastore = {"tax_Periods":12}
-
-//let annualise = 0
+const datastore = {"tax_Periods":12};
 
 //SARS Thresholds
 let under65 = 91250;
 let over65 = 141250;
 let over75 = 157900;
-let ageValue = 0
+
+let ageValue = 0;
 
 let min = 0;
 let max = 0;
 let perc = 0;
-let base = 0
+let base = 0;;
 let PAYE = 0;
 
-let UIF = 0;
 let UIFPerc = 0.01;
 let UIFCeiling = 177.12;
 
-
-let nett = 0
+let nett = 0;
 
 //SARSBrackets
 let SARSBrackets = [
@@ -67,289 +64,154 @@ let SARSBrackets = [
 ];
 //console.log(SARSBrackets[1])
 
-//Make a command that gets the user age and earnings into the calculation
-//this pulls the ui data entered
-// class GetUserInput {
-//     constructor(gross_earnings, age) {
-//       this.gross_earnings = gross_earnings;
-//       this.age = age;
-//     }
-//     getUserInput() {
-//         gross_earnings = document.getElementById(this.gross_earnings).value;
-//         age = document.getElementById(this.age).value;
-//     }
-//   }
-  
-//   //using this as the main input for calculations and classes
-//    let myuserinput = new GetUserInput(10000,25);
-//    console.log(myuserinput.gross_earnings, myuserinput.age)
-//    //the below sets the values from the above class into variables that can be used in the next class 
-//    //without the  myuseinput needing to be entered. better way? 
-//    //commenting it out for now to try find a better way 
-//    gross_earnings = myuserinput.gross_earnings
-//    age = myuserinput.age
-//    console.log(gross_earnings)
-//    console.log(age)
-
 class GetUserInput {
     constructor(name) {
       this.name = name;
     }
-    execute() {
-        //console.log(this.name)
-        //console.log(document.getElementById(this.name).value)
-        datastore[this.name] = document.getElementById(this.name).value
+    execute(datastore) {
+        datastore[this.name] = parseInt(document.getElementById(this.name).value);
+        return datastore;
     }
-  }
-  
-//   //using this as the main input for calculations and classes
-//    let myuserinput = new GetUserInput(10000,25);
-//    console.log(myuserinput.gross_earnings, myuserinput.age)
-//    //the below sets the values from the above class into variables that can be used in the next class 
-//    //without the  myuseinput needing to be entered. better way? 
-//    //commenting it out for now to try find a better way 
-//    gross_earnings = myuserinput.gross_earnings
-//    age = myuserinput.age
-//    console.log(gross_earnings)
-//    console.log(age)
-
-  //Create class to replace Annualize function inputting the variables from the getUserInput class 
-//   class Annualization {
-//     constructor(gross_earnings, tax_Periods, current_Period, annual_gross) {
-//       this.gross_earnings = gross_earnings;
-//       this.tax_Periods = tax_Periods;
-//       this.current_Period = current_Period;
-//       this.annual_gross = annual_gross;
-//     }
-//     calcAnnualGross() {
-//         //let annual_gross = this.annual_gross
-//         return this.annual_gross = (datasore[this.gross_earnings] * this.tax_Periods / this.current_Period);
-//         //annual_gross = this.annual_gross
-//         //console.log(this.annual_gross);
-//     }
-//   }
-  
-//   let myAnnualGross = new Annualization(gross_earnings, tax_Periods, current_Period, 0);
-//   //console.log(myAnnualGross.gross_earnings, tax_Periods, current_Period, annual_gross)
-// console.log(myAnnualGross);
-// console.log(myAnnualGross.annual_gross);
-// console.log(myAnnualGross.calcAnnualGross());
-// myAnnualGross = myAnnualGross.calcAnnualGross()
-// console.log(myAnnualGross)
-
-    // calcSARSBrackets() {
-    //     for (option of SARSBrackets) {
-    //         //console.log(option);
-    //         if (annualise > option.Min && annualise < option.Max)  {
-    //             min = option.Min;
-    //             max = option.Max;
-    //             perc = option.Perc
-    //             console.log(option);
-    //         }
-    //     }
-    //     console.log(min);
-    //     console.log(max);
-
-
-      //Create class to replace Annualize function inputting the variables from the getUserInput class 
-  class Annualization {
-    constructor(annual_gross, gross_earnings, tax_Periods) {
-      this.gross_earnings = gross_earnings;
-      this.tax_Periods = tax_Periods;
-      this.annual_gross = annual_gross;
+  };
+ 
+//Create class to replace Annualize function inputting the variables from the getUserInput class 
+//sample usage: annual_Gross, gross_Earnings, tax_Periods - this could differ with different inputs. specific. Can generalise the namings more. 
+//AnnualisedAmt, grossamt, Periods
+  class Annualize {
+    constructor(annual_Gross, gross_Earnings, tax_Periods) {
+        this.annual_Gross = annual_Gross;
+        this.gross_Earnings = gross_Earnings;
+        this.tax_Periods = tax_Periods;
     }
-    calcAnnualGross() {
-        //let annual_gross = this.annual_gross
-        datastore[this.annual_gross] = datastore[this.gross_earnings] * datastore[this.tax_Periods] ;
-        //annual_gross = this.annual_gross
-        //console.log(this.annual_gross);
-    };
-    calcSARSBrackets() {
-        for (var option of SARSBrackets) {
-            //console.log(option);
-            if (datastore[this.annual_gross] > option.Min && datastore[this.annual_gross] < option.Max)  {
-                min = option.Min;
-                max = option.Max;
-                perc = option.Perc
-                console.log(option);
-            }
-        }
+    calcAnnualGross(datastore) {
+        //adding them into the datastore object
+        datastore[this.annual_Gross] = datastore[this.gross_Earnings] * datastore[this.tax_Periods];
+        return datastore;
     }
   };
   
-  //let myAnnualGross = new Annualization(gross_earnings, tax_Periods, current_Period, 0);
-  //console.log(myAnnualGross.gross_earnings, tax_Periods, current_Period, annual_gross)
-// console.log(myAnnualGross);
-// console.log(myAnnualGross.annual_gross);
-// console.log(myAnnualGross.calcAnnualGross());
-// myAnnualGross = myAnnualGross.calcAnnualGross()
-// console.log(myAnnualGross)
-
-    
-        console.log(min);
-        console.log(max);
-
-    
-//Annualise earning and retrieve SARS tax bracket
-function Annualisation() {
-    
-    annualise = (gross_earnings * tax_Periods / current_Period)
-    console.log("annualise: " + gross_earnings * tax_Periods / current_Period);
-
-    for (option of SARSBrackets) {
-        //console.log(option);
-        if (annualise > option.Min && annualise < option.Max)  {
-            min = option.Min;
-            max = option.Max;
-            perc = option.Perc
-            console.log(option);
-        }
+class GetTaxAmount {
+    constructor (annual_Gross, sars_Bracket, base_Value, threshold_Value, tax_Amount) {
+        this.annual_Gross = annual_Gross;
+        this.sars_Bracket = sars_Bracket;
+        this.base_Value = base_Value;
+        this.threshold_Value = threshold_Value;
+        this.tax_Amount = tax_Amount;
     }
-    console.log(min);
-    console.log(max);
-
-    //return Annualise;
-
-}
-
-
-function Base() {
-
-    R0 = 0;
-    R1 = R0 + (SARSBrackets[0].Max - SARSBrackets[0].Min) * SARSBrackets[0].Perc;
-    R2 = R1 + (SARSBrackets[1].Max - SARSBrackets[1].Min) * SARSBrackets[1].Perc;
-    R3 = R2 + (SARSBrackets[2].Max - SARSBrackets[2].Min) * SARSBrackets[2].Perc;
-    R4 = R3 + (SARSBrackets[3].Max - SARSBrackets[3].Min) * SARSBrackets[3].Perc;
-    R5 = R4 + (SARSBrackets[4].Max - SARSBrackets[4].Min) * SARSBrackets[4].Perc;
-    R6 = R5 + (SARSBrackets[5].Max - SARSBrackets[5].Min) * SARSBrackets[5].Perc;
-
-    // console.log('Base: ' + R0)
-    // console.log('Base: ' + R1)
-    // console.log('Base: ' + R2)
-    // console.log('Base: ' + R3)
-    // console.log('Base: ' + R4)
-    // console.log('Base: ' + R5)
-    // console.log('Base: ' + R6)
-    
-    // console.log("annualise base: " + annualise)
+    calcSARSBrackets(datastore) {
+        for (var option of SARSBrackets) {
+            if (datastore[this.annual_Gross] > option.Min && datastore[this.annual_Gross] < option.Max)  {
+                min = option.Min;
+                max = option.Max;
+                perc = option.Perc;
+            //console.log(option);
+            datastore[this.sars_Bracket] = option;
+            }
+        }
+        return datastore;
+    }
+    calcBaseAmount(datastore) {
+        var R0 = 0;
+        var R1 = R0 + (SARSBrackets[0].Max - SARSBrackets[0].Min) * SARSBrackets[0].Perc;
+        var R2 = R1 + (SARSBrackets[1].Max - SARSBrackets[1].Min) * SARSBrackets[1].Perc;
+        var R3 = R2 + (SARSBrackets[2].Max - SARSBrackets[2].Min) * SARSBrackets[2].Perc;
+        var R4 = R3 + (SARSBrackets[3].Max - SARSBrackets[3].Min) * SARSBrackets[3].Perc;
+        var R5 = R4 + (SARSBrackets[4].Max - SARSBrackets[4].Min) * SARSBrackets[4].Perc;
+        var R6 = R5 + (SARSBrackets[5].Max - SARSBrackets[5].Min) * SARSBrackets[5].Perc;
 
     //started with the lower level as more emps will be calcing in lower bracket, so will move out the if faster?
-        if (annualise > SARSBrackets[0].Min && annualise < SARSBrackets[0].Max) {
-          base = R0;
-          //console.log("base final 1: " + base)
-          } else if (annualise > SARSBrackets[1].Min && annualise < SARSBrackets[1].Max) {
-            base = R1;
-            //console.log("base final 2: " + base)
-          } else if (annualise > SARSBrackets[2].Min && annualise < SARSBrackets[2].Max) {    
-            base = R2;
-            //console.log("base final 3: " + base)
-          } else if (annualise > SARSBrackets[3].Min && annualise < SARSBrackets[3].Max) {  
-            base = R3;
-            //console.log("base final 4: " + base)
-          } else if (annualise > SARSBrackets[4].Min && annualise < SARSBrackets[4].Max) {
-            base = R4;
-            //console.log("base final 5: " + base)
-          } else if (annualise > SARSBrackets[5].Min && annualise < SARSBrackets[5].Max) {
-            base = R5;
-            //console.log("base final 6: " + base)
-          } else if (annualise > SARSBrackets[6].Min && annualise < SARSBrackets[6].Max) {
-            base = R6;
-            //console.log("base final 7: " + base)
-          } else {"whyyyyyyyy"}
-
-      console.log("base finale: " + base)
-}
-
-
-function RebateAndThreshold() {
-
-var Perc = (SARSBrackets[0].Perc)
-var Primary = (under65 * Perc)
-var Secondary = (over65 - under65)
-var Tertiary = (over75 - over65)
-
-if (age >= 75) {
-    ageValue = over75,
-    ThresholdValue = (Primary + (Secondary * Perc) + (Tertiary * Perc));
-    //console.log(over75);
-} else if (age >= 65) {
-    ageValue = over65,
-    ThresholdValue = (Primary + (Secondary * Perc));
-    //console.log(over65);
-} else 
-    ageValue = under65,
-    ThresholdValue = Primary;
-    //console.log(under65);
-
-    console.log("age: " + age)
-    console.log("ageValue: " + ageValue)
-    console.log("ThresholdValue: " + ThresholdValue)
-
-}
-
-
-//Tax Calc from SARS rates
-function TaxCalc() {
-    console.log(annualise);
-    console.log("ageValue: " + ageValue);
-    
-    PAYE = (annualise - min);
-    PAYE = PAYE * perc;
-    PAYE = PAYE + base;
-    PAYE = PAYE - ThresholdValue;
-    PAYE = PAYE * current_Period / tax_Periods;
-
-    if (PAYE < 0) {
-        PAYE = 0
+        if (datastore[this.annual_Gross] > SARSBrackets[0].Min && datastore[this.annual_Gross] < SARSBrackets[0].Max) {
+            datastore[this.base_Value] = R0;
+          } else if (datastore[this.annual_Gross] > SARSBrackets[1].Min && datastore[this.annual_Gross] < SARSBrackets[1].Max) {
+            datastore[this.base_Value] = R1;
+          } else if (datastore[this.annual_Gross] > SARSBrackets[2].Min && datastore[this.annual_Gross] < SARSBrackets[2].Max) {    
+            datastore[this.base_Value] = R2;
+          } else if (datastore[this.annual_Gross] > SARSBrackets[3].Min && datastore[this.annual_Gross] < SARSBrackets[3].Max) {  
+            datastore[this.base_Value] = R3;
+          } else if (datastore[this.annual_Gross] > SARSBrackets[4].Min && datastore[this.annual_Gross] < SARSBrackets[4].Max) {
+            datastore[this.base_Value] = R4;
+          } else if (datastore[this.annual_Gross] > SARSBrackets[5].Min && datastore[this.annual_Gross] < SARSBrackets[5].Max) {
+            datastore[this.base_Value] = R5;
+          } else if (datastore[this.annual_Gross] > SARSBrackets[6].Min && datastore[this.annual_Gross] < SARSBrackets[6].Max) {
+            datastore[this.base_Value] = R6;
+          } else {"whyyyyyyyy"};
+        return datastore;
     }
+    calcThresholdAmount(datastore) {
+        var Perc = (SARSBrackets[0].Perc);
+        var Primary = (under65 * Perc);
+        var Secondary = (over65 - under65);
+        var Tertiary = (over75 - over65);
 
-    console.log("PAYE: " + PAYE);
-
+        if (datastore.Age >= 75) {
+            ageValue = over75,
+            datastore[this.threshold_Value] = (Primary + (Secondary * Perc) + (Tertiary * Perc));
+        } else if (datastore.Age >= 65) {
+            ageValue = over65,
+            datastore[this.threshold_Value] = (Primary + (Secondary * Perc));
+        } else 
+            ageValue = under65,
+            datastore[this.threshold_Value] = Primary;
+        return datastore;
+    }
+    calcTaxAmount(datastore) {
+        let TAX
+        TAX = (datastore[this.annual_Gross] - min);
+        TAX = TAX * perc;
+        TAX = TAX + datastore[this.base_Value];
+        TAX = TAX - datastore[this.threshold_Value];
+        TAX = TAX * tax_Periods;
+    
+        if (TAX < 0) {
+            TAX = 0;
+        };
+        datastore[this.tax_Amount] = TAX;
+        return datastore;
+    }
 }
 
-function UIFCalc() {
-
-    UIF = gross_earnings * UIFPerc;
-    
-    if (UIF > UIFCeiling) {
-        UIF = UIFCeiling
+class CalcContribution {
+    constructor (gross_Earnings, contrib_Amount, ceiling_Check) {
+        this.gross_Earnings = gross_Earnings;
+        this.contrib_Amount = contrib_Amount;
+        this.ceiling_Check = ceiling_Check;
     }
-
-    console.log("UIF: " + UIF);
-
+    calcValue(datastore) {
+        this.contrib_Amount = datastore[this.gross_Earnings] * UIFPerc;
+        return datastore;
+    }
+    ceilingCheck(datastore) {
+        if (this.contrib_Amount > UIFCeiling) {
+            this.contrib_Amount = UIFCeiling;
+        };
+        return datastore;
+    }
 }
 
 function Nett() {
-    
-    nett = gross_earnings - (PAYE + UIF)
-    console.log("nett: " + nett);
-
+    nett = datastore[this.gross_Earnings] - (PAYE + UIF);
 }
 
-let test1 = new GetUserInput('GrossEarnings') //ID from the HTML
-let test2 = new GetUserInput('Age')
-let myAnnualGross = new Annualization('annualgross', 'GrossEarnings', "tax_Periods");
+let myGrossEarnings = new GetUserInput('GrossEarnings'); //ID from the HTML
+let myAge = new GetUserInput('Age'); //ID from the HTML
+let myAnnualGross = new Annualize('AnnualGross', 'GrossEarnings', 'tax_Periods');
+let myTaxAmount = new GetTaxAmount('AnnualGross','sarsBracket','BaseValue','ThresholdValue','TaxAmount');
+let myContribValue = new CalcContribution('GrossEarnings','ContribAmount','CeilingCheck');
 
 function calculate() {
     
-    // gross_earnings = document.getElementById("GrossEarnings").value
-    // age = document.getElementById("Age").value
-    test1.execute();
-    test2.execute();
-    myAnnualGross.calcAnnualGross();
-    myAnnualGross.calcSARSBrackets()
-    console.log(datastore);
-    
-//Annualisation();
-Base();
-RebateAndThreshold();
-TaxCalc();
-UIFCalc();
-Nett();
-console.log("here");
-document.getElementById("paye-result").innerHTML = PAYE;
-document.getElementById("uif-result").innerHTML = UIF;
-document.getElementById("nettpay_result").innerText = nett;
+myGrossEarnings.execute(datastore);
+myAge.execute(datastore);
+myAnnualGross.calcAnnualGross(datastore);
+myTaxAmount.calcSARSBrackets(datastore);
+myTaxAmount.calcBaseAmount(datastore);
+myTaxAmount.calcThresholdAmount(datastore);
+myTaxAmount.calcTaxAmount(datastore);
 
+//console.log("TRYING: " + myTaxAmount[tax_Amount]);
+document.getElementById("paye-result").value = datastore.TaxAmount;
+//document.getElementById("uif-result").value = UIF;
+document.getElementById("nettpay_result").value = nett;
+
+console.log(datastore);
 }
-//Calculate()
