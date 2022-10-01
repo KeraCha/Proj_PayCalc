@@ -154,71 +154,35 @@ function calcRebate(amount, table) {
 function smart_table_lookup(amount, table, style) {
 
     switch (style) {
-  
       case "percent":
-  
         return calculate(amount, table);
-  
       case "sum":
-  
         return calcRebate(amount, table);
-  
       case "value":
-  
         return calcThreshold(amount, table);
-  
       default:
-  
         throw Error("Style isn't one of percent, amount, value", style);
-  
     }
-  
   }
-  
-  
-  
   console.log("Smart table lookup:");
-  
   console.log("______________________");
-  
-  
-  
+
   const table = [
-  
     [225999, table_1],
-  
     [226000, table_1],
-  
     [226001, table_1],
-  
   ];
-  
-  
-  
   table.map(([amount, table]) => {
-  
     console.log(
-  
       `PERCENT: amount=${amount}=`,
-  
       smart_table_lookup(amount, table, "percent")
-  
     );
-  
     console.log(
-  
       `SUM: amount=${amount}=`,
-  
       smart_table_lookup(amount, table, "sum")
-  
     );
-  
     console.log(
-  
       `VALUE: amount=${amount}=`,
-  
       smart_table_lookup(amount, table, "value")
-  
     );
-  
   });

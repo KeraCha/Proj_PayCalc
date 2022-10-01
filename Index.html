@@ -27,7 +27,7 @@
         <input type="text" id="Age" name="Age" placeholder="Please enter your age">
         <div id="Calculate">
             <br/>
-            <button id="Calculate" onclick="test()">Calculate</button>
+            <button id="Calculate" onclick="window.test()">Calculate</button>
         </div>
     </section>
 
@@ -39,13 +39,16 @@
         <h2>Nett pay: <label id="nettpay_result"><input type="text" value=""></label></h2>
     </section>
 
-    <script src="PayslipCalculator.js"></script>
+    <script type="module">
+     import {calculate} from   "./PayslipCalculator.js";
 
-    <script>
+    
+    
         function test() {
             calculate();
         }
         //console.log("test");
+        window.test = test;
 
     </script>
 
