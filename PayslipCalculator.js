@@ -1,4 +1,4 @@
-import * as cmd from './commands.js'
+import * as cmd from './commands.js';
 //input
 //let earnings = 20000;
 //let age = 25;
@@ -6,8 +6,8 @@ import * as cmd from './commands.js'
 //let current_Period = 1;
 //CHANGES: CHANGE FROM A GLOBAL VARIABLE INTO A SWITCH IN GetUserInput (ADD SWITCH TO GET VALUE FROM UI INPUT?) //new class
 //CHANGES: incorporate a switch that when monthly/biweekly/weekly are selected from UI that sets the value to 12/24/52. 
-let tax_Periods = 12;
-const datastore = {"tax_Periods":12};
+
+const datastore = {};
 
 //CHANGES: CHANGE THRESHOLD TO ARRAY TABLE
 //SARS Thresholds
@@ -81,7 +81,8 @@ function Nett() {
 
 let myGrossEarnings = new cmd.GetUserInput('GrossEarnings'); //ID from the HTML
 let myAge = new cmd.GetUserInput('Age'); //ID from the HTML
-let myAnnualGross = new cmd.Annualize('AnnualGross', 'GrossEarnings', 'tax_Periods');
+let myPeriods = new cmd.GetUserInput('Periods'); //ID from the HTML
+let myAnnualGross = new cmd.Annualize('AnnualGross', 'GrossEarnings', 'Periods');
 //CHANGES NEED A COMMAND THAT PUSHES THE BRACKETS INTO THE CASE, NO DEPENDENCIES
 //USE OBJECTS TO BRING BRACKETS INTO THE COMMAND
 //PUT CALLS INTO AN ARRAY 
@@ -93,16 +94,18 @@ export function calculate() {
     
 myGrossEarnings.execute(datastore);
 myAge.execute(datastore);
-myAnnualGross.calcAnnualGross(datastore);
-myTaxAmount.calcSARSBrackets(datastore);
-myTaxAmount.calcBaseAmount(datastore);
-myTaxAmount.calcThresholdAmount(datastore);
-myTaxAmount.calcTaxAmount(datastore);
+myPeriods.execute(datastore);
+myAnnualGross.execute(datastore);
+myTaxAmount.execute(datastore);
+myTaxAmount.execute(datastore);
+myTaxAmount.execute(datastore);
+myTaxAmount.execute(datastore);
 
 //console.log("TRYING: " + myTaxAmount[tax_Amount]);
 document.getElementById("paye-result").value = datastore.TaxAmount;
 //document.getElementById("uif-result").value = UIF;
 document.getElementById("nettpay_result").value = nett;
+
 
 console.log(datastore);
 }

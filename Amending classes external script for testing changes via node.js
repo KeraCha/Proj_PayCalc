@@ -1,17 +1,91 @@
-export class GetUserInput {
+
+//input
+//let earnings = 20000;
+//let age = 25;
+//let gross_Earnings = 0;
+//let current_Period = 1;
+//CHANGES: CHANGE FROM A GLOBAL VARIABLE INTO A SWITCH IN GetUserInput (ADD SWITCH TO GET VALUE FROM UI INPUT?) //new class
+//CHANGES: incorporate a switch that when monthly/biweekly/weekly are selected from UI that sets the value to 12/24/52. 
+
+const datastore = {};
+
+//CHANGES: CHANGE THRESHOLD TO ARRAY TABLE
+//SARS Thresholds
+let under65 = 91250;
+let over65 = 141250;
+let over75 = 157900;
+//CHANGES: ADD REBATE TABLE
+
+let ageValue = 0;
+
+let min = 0;
+let max = 0;
+let perc = 0;
+let base = 0;;
+let PAYE = 0;
+
+//CHANGES: NAMING CONVENTIONS TO EXCL UIF WORDING
+let UIFPerc = 0.01;
+let UIFCeiling = 177.12;
+
+let nett = 0;
+
+//CHANGE TO THE NEW FUNCTIONALITY FROM TABLESLEARNING TO USE ONLY MAX AND PERC
+//CHANGE TABLE TO CONST AND CHANGE TO BE AN ARRAY WITHIN ARRAY INSTEAD OF THE OBJECT IN THE ARRAY
+//SARSBrackets
+let SARSBrackets = [
+    {
+        Min:0,
+        Max:226000,
+        Perc:0.18
+    },
+    {
+        Min:226000,
+        Max:353100,
+        Perc:0.26
+    },
+    {
+        Min:353100,
+        Max:488700,
+        Perc:0.31
+    },
+    {
+        Min:488700,
+        Max:641400,
+        Perc:0.36
+    },
+    {
+        Min:641400,
+        Max:817600,
+        Perc:0.39
+    },
+    {
+        Min:817600,
+        Max:1731600,
+        Perc:0.41
+    },
+    {
+        Min:1731600,
+        Max:999999999,
+        Perc:0.45
+    },
+];
+//console.log(SARSBrackets[1])
+
+class GetUserInput {
     constructor(name) {
       this.name = name;
     }
     execute(datastore) {
-        datastore[this.name] = parseFloat(document.getElementById(this.name).value);
+        datastore[this.name] = parseFloat(getElementById(this.name).value);
         return datastore;
     }
   };
  
-//Create export class to replace Annualize function inputting the variables from the getUserInput export class 
+//Create class to replace Annualize function inputting the variables from the getUserInput class 
 //sample usage: annual_Gross, gross_Earnings, tax_Periods - this could differ with different inputs. specific. Can generalise the namings more. 
 //AnnualisedAmt, grossamt, Periods
-  export class Annualize {
+  class Annualize {
     //CHANGES: ABSTRACT NAMING CONVENTIONS: resultOut, resultIn, Periods 
     constructor(annual_Gross, gross_Earnings, tax_Periods) {
         this.annual_Gross = annual_Gross;
@@ -26,10 +100,10 @@ export class GetUserInput {
     }
   };
 
-  //CHANGES: ADD A export class TO RETRIEVE MIN, MAX, PERC, TO BE USED BY OTHER export classES LIKE THE UIF BECAUSE THE FUNCTION REMAINS THE SAME
-  /////CHANGES: export classES CALCPERCENTAGE, CALCVALUE, CALCSUMMATION
-  //CHANGES: Separate these commands in GetTaxAmount into different export classes
-export class GetTaxAmount {
+  //CHANGES: ADD A class TO RETRIEVE MIN, MAX, PERC, TO BE USED BY OTHER classES LIKE THE UIF BECAUSE THE FUNCTION REMAINS THE SAME
+  /////CHANGES: classES CALCPERCENTAGE, CALCVALUE, CALCSUMMATION
+  //CHANGES: Separate these commands in GetTaxAmount into different classes
+class GetTaxAmount {
     //CHANGES: NAMING CONVENTIONS ABSTRACTION
     constructor (annual_Gross, sars_Bracket, base_Value, threshold_Value, tax_Amount) {
         this.annual_Gross = annual_Gross;
@@ -39,7 +113,7 @@ export class GetTaxAmount {
         this.tax_Amount = tax_Amount;
     }
     //CHANGE TO USE NEW FUNCTIONS CREATED IN TABLESLEARNING
-    //CHANGES: CHANGE NAMING TO GETMINS = export class OF ITS OWN WHICH CAN BE USED IN OTHERS LIKE THRESHOLD AND REBATE
+    //CHANGES: CHANGE NAMING TO GETMINS = class OF ITS OWN WHICH CAN BE USED IN OTHERS LIKE THRESHOLD AND REBATE
     //calcSARSBrackets
     execute(datastore) {
         for (var option of SARSBrackets) {
@@ -89,7 +163,7 @@ execute(datastore) {
         var Primary = (under65 * Perc);
         var Secondary = (over65 - under65);
         var Tertiary = (over75 - over65);
-//CHANGES: IS IT CORRECT TO BE USING DATASTORE.AGE TO UTILISE THE VALUE FROM THE INPUT IN THE GETUSERINPUT export class
+//CHANGES: IS IT CORRECT TO BE USING DATASTORE.AGE TO UTILISE THE VALUE FROM THE INPUT IN THE GETUSERINPUT class
         if (datastore.Age >= 75) {
             ageValue = over75,
             datastore[this.threshold_Value] = (Primary + (Secondary * Perc) + (Tertiary * Perc));
@@ -101,7 +175,7 @@ execute(datastore) {
             datastore[this.threshold_Value] = Primary;
         return datastore;
     }
-    //CHANGES: NEW export class
+    //CHANGES: NEW class
     //calcTaxAmount
     execute(datastore) {
         let TAX
@@ -119,10 +193,10 @@ execute(datastore) {
     }
 }
 
-//ADD DEANNUALISE export class.
+//ADD DEANNUALISE class.
 //CHANGES: CHANGE THE METHOD NAMES TO "EXECUTE"
-//CHANGES: ADD TABLE ARRAY FOR THE UIF VALUES LIKE WE DID IN TABLE LEARNING, CHANGE TO THAT FUNCTION. THEREFORE NO LONGER REQUIRE TWO export classES.
-export class CalcContribution {
+//CHANGES: ADD TABLE ARRAY FOR THE UIF VALUES LIKE WE DID IN TABLE LEARNING, CHANGE TO THAT FUNCTION. THEREFORE NO LONGER REQUIRE TWO classES.
+class CalcContribution {
     constructor (gross_Earnings, contrib_Amount, ceiling_Check) {
         this.gross_Earnings = gross_Earnings;
         this.contrib_Amount = contrib_Amount;
@@ -141,3 +215,39 @@ export class CalcContribution {
         return datastore;
     }
 }
+
+//CHANGES MAKE GETNETT A CLASS
+function Nett() {
+    nett = datastore[this.gross_Earnings] - (PAYE + UIF);
+}
+
+let myGrossEarnings = new GetUserInput('GrossEarnings'); //ID from the HTML
+let myAge = new GetUserInput('Age'); //ID from the HTML
+let myPeriods = new GetUserInput('Periods'); //ID from the HTML
+let myAnnualGross = new Annualize('AnnualGross', 'GrossEarnings', 'Periods');
+//CHANGES NEED A COMMAND THAT PUSHES THE BRACKETS INTO THE CASE, NO DEPENDENCIES
+//USE OBJECTS TO BRING BRACKETS INTO THE COMMAND
+//PUT CALLS INTO AN ARRAY 
+let myTaxAmount = new GetTaxAmount('AnnualGross','sarsBracket','BaseValue','ThresholdValue','TaxAmount');
+let myContribValue = new CalcContribution('GrossEarnings','ContribAmount','CeilingCheck');
+
+//CHANGES: CHANGE CALCULATE FUNCTION TO MAP TABLE
+function calculate() {
+    
+myGrossEarnings.execute(datastore);
+myAge.execute(datastore);
+myPeriods.execute(datastore);
+myAnnualGross.execute(datastore);
+myTaxAmount.execute(datastore);
+myTaxAmount.execute(datastore);
+myTaxAmount.execute(datastore);
+myTaxAmount.execute(datastore);
+
+//console.log("TRYING: " + myTaxAmount[tax_Amount]);
+getElementById("paye-result").value = datastore.TaxAmount;
+//document.getElementById("uif-result").value = UIF;
+getElementById("nettpay_result").value = nett;
+
+console.log(datastore);
+}
+calculate();

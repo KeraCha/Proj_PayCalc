@@ -18,16 +18,21 @@
         <br/>
         <label for="Gross Earnings">Gross Earnings:</label>
         <input type="text" id="GrossEarnings" name="Gross Earnings" placeholder="Please enter your earnings">
-
     </section>
 
     <section id="Calculator">
         <br/>
         <label for="Age">Age:</label>
         <input type="text" id="Age" name="Age" placeholder="Please enter your age">
+    </section>
+
+    <section id="Calculator">
+        <br/>
+        <label for="Periods">Periods:</label>
+        <input type="text" id="Periods" name="Periods" placeholder="Enter 12, 24 or 52">
         <div id="Calculate">
             <br/>
-            <button id="Calculate" onclick="window.test()">Calculate</button>
+            <button id="Calculate">Calculate</button>
         </div>
     </section>
 
@@ -41,17 +46,18 @@
 
     <script type="module">
      import {calculate} from   "./PayslipCalculator.js";
+    
+        // function test() {
+        //     calculate();
+        // }
+        // //console.log("test");
+        // window.test = test;
 
-    
-    
-        function test() {
-            calculate();
-        }
-        //console.log("test");
-        window.test = test;
+            document.getElementById("Calculate").addEventListener("click", () => {
+                calculate();
+            });
 
     </script>
-
 
 </body>
 </html>
