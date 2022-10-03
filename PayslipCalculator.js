@@ -1,4 +1,4 @@
-import * as cmd from './commands.js';
+import * as cmd from './commands.js'
 //input
 //let earnings = 20000;
 //let age = 25;
@@ -8,6 +8,7 @@ import * as cmd from './commands.js';
 //CHANGES: incorporate a switch that when monthly/biweekly/weekly are selected from UI that sets the value to 12/24/52. 
 
 const datastore = {};
+const brackets = {};
 
 //CHANGES: CHANGE THRESHOLD TO ARRAY TABLE
 //SARS Thresholds
@@ -33,46 +34,15 @@ let nett = 0;
 //CHANGE TO THE NEW FUNCTIONALITY FROM TABLESLEARNING TO USE ONLY MAX AND PERC
 //CHANGE TABLE TO CONST AND CHANGE TO BE AN ARRAY WITHIN ARRAY INSTEAD OF THE OBJECT IN THE ARRAY
 //SARSBrackets
-let SARSBrackets = [
-    {
-        Min:0,
-        Max:226000,
-        Perc:0.18
-    },
-    {
-        Min:226000,
-        Max:353100,
-        Perc:0.26
-    },
-    {
-        Min:353100,
-        Max:488700,
-        Perc:0.31
-    },
-    {
-        Min:488700,
-        Max:641400,
-        Perc:0.36
-    },
-    {
-        Min:641400,
-        Max:817600,
-        Perc:0.39
-    },
-    {
-        Min:817600,
-        Max:1731600,
-        Perc:0.41
-    },
-    {
-        Min:1731600,
-        Max:999999999,
-        Perc:0.45
-    },
+const table_1 = [
+    [226000, 0.18],
+    [353100, 0.26],
+    [488700, 0.31],
+    [641400, 0.36],
+    [817600, 0.39],
+    [1731600, 0.41],
+    [null, 0.45]
 ];
-//console.log(SARSBrackets[1])
-
-
 
 //CHANGES MAKE GETNETT A CLASS
 function Nett() {
@@ -86,8 +56,9 @@ let myAnnualGross = new cmd.Annualize('AnnualGross', 'GrossEarnings', 'Periods')
 //CHANGES NEED A COMMAND THAT PUSHES THE BRACKETS INTO THE CASE, NO DEPENDENCIES
 //USE OBJECTS TO BRING BRACKETS INTO THE COMMAND
 //PUT CALLS INTO AN ARRAY 
-let myTaxAmount = new cmd.GetTaxAmount('AnnualGross','sarsBracket','BaseValue','ThresholdValue','TaxAmount');
-let myContribValue = new cmd.CalcContribution('GrossEarnings','ContribAmount','CeilingCheck');
+let myMins = new cmd.GetMins('Min','Max','Percentage');
+// let myTaxAmount = new cmd.GetTaxAmount('AnnualGross','sarsBracket','BaseValue','ThresholdValue','TaxAmount');
+// let myContribValue = new cmd.CalcContribution('GrossEarnings','ContribAmount','CeilingCheck');
 
 //CHANGES: CHANGE CALCULATE FUNCTION TO MAP TABLE
 export function calculate() {
@@ -95,17 +66,17 @@ export function calculate() {
 myGrossEarnings.execute(datastore);
 myAge.execute(datastore);
 myPeriods.execute(datastore);
+myMins.execute(datastore);
 myAnnualGross.execute(datastore);
-myTaxAmount.execute(datastore);
-myTaxAmount.execute(datastore);
-myTaxAmount.execute(datastore);
-myTaxAmount.execute(datastore);
+// myTaxAmount.execute(datastore);
+// myTaxAmount.execute(datastore);
+// myTaxAmount.execute(datastore);
+// myTaxAmount.execute(datastore);
 
 //console.log("TRYING: " + myTaxAmount[tax_Amount]);
 document.getElementById("paye-result").value = datastore.TaxAmount;
 //document.getElementById("uif-result").value = UIF;
 document.getElementById("nettpay_result").value = nett;
-
 
 console.log(datastore);
 }

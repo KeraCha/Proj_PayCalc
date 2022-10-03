@@ -77,7 +77,7 @@ class GetUserInput {
       this.name = name;
     }
     execute(datastore) {
-        datastore[this.name] = parseFloat(getElementById(this.name).value);
+        datastore[this.name] = parseFloat(document.getElementById(this.name).value);
         return datastore;
     }
   };
@@ -243,10 +243,14 @@ myTaxAmount.execute(datastore);
 myTaxAmount.execute(datastore);
 myTaxAmount.execute(datastore);
 
-//console.log("TRYING: " + myTaxAmount[tax_Amount]);
-getElementById("paye-result").value = datastore.TaxAmount;
-//document.getElementById("uif-result").value = UIF;
-getElementById("nettpay_result").value = nett;
+// //console.log("TRYING: " + myTaxAmount[tax_Amount]);
+// document.getElementById("paye-result").value = datastore.TaxAmount;
+// //document.getElementById("uif-result").value = UIF;
+// document.getElementById("nettpay_result").value = nett;
+
+document.getElementById("paye-result").innerHTML = PAYE;
+document.getElementById("uif-result").innerHTML = UIF;
+document.getElementById("nettpay_result").innerText = nett;
 
 console.log(datastore);
 }
