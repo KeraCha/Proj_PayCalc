@@ -1,9 +1,11 @@
+import {smart_table_lookup} from './tables.js'
+
 export class GetUserInput {
-    constructor(name) {
-      this.name = name;
+    constructor(input) {
+      this.input = input;
     }
     execute(datastore) {
-        datastore[this.name] = parseFloat(document.getElementById(this.name).value);
+        datastore[this.input] = parseFloat(document.getElementById(this.input).value);
         return datastore;
     }
   };
@@ -26,64 +28,49 @@ export class GetUserInput {
     }
   };
 
-  const table_1 = [[226000, 0.18],[353100, 0.26],[488700, 0.31],[641400, 0.36],[817600, 0.39],[1731600, 0.41],[null, 0.45]];
-
-  //need to get the sars brackets into a class and derive the mins
-  export class GetMins {
-    constructor (min, max, percent) {
-        this.min = min;
-        this.max = max;
-        this.percent = percent;
+  //summation from table array being passed through as an object
+  export class LookupInPercentageTable {
+    constructor (sum_Value, table_data, annual_Gross) {
+        this.sum_Value = sum_Value;
+        this.table_data = table_data;
+        this.annual_Gross = annual_Gross;
     }
     //CHANGE TO USE NEW FUNCTIONS CREATED IN TABLESLEARNING
     //CHANGES: CHANGE NAMING TO GETMINS = export class OF ITS OWN WHICH CAN BE USED IN OTHERS LIKE THRESHOLD AND REBATE
-    //calcSARSBrackets
-    execute(brackets) {
-        let min = 0;
-
-        for (const [max, percent] of table_1) {
-            let percentage = 0;
-            let maxBracket = 0;
-            maxBracket = (max - min);
-
-         console.log(min, max, percent);
-         table_1.push({min: this.min});
-         //datastore[this.min] = min;
-         min = max;
+    execute(datastore) {
+        datastore[this.sum_Value] = smart_table_lookup(datastore[this.annual_Gross], this.table_data, 'percent');
+        return datastore;
         }
-        //datastore[this.min] = min;
-        console.log(brackets);
-        return brackets;
     }
-  }
 
   //CHANGES: ADD A export class TO RETRIEVE MIN, MAX, PERC, TO BE USED BY OTHER export classES LIKE THE UIF BECAUSE THE FUNCTION REMAINS THE SAME
   /////CHANGES: export classES CALCPERCENTAGE, CALCVALUE, CALCSUMMATION
   //CHANGES: Separate these commands in GetTaxAmount into different export classes
-export class GetValue {
-    //CHANGES: NAMING CONVENTIONS ABSTRACTION
-    constructor (annual_Gross, sars_Bracket, base_Value, threshold_Value, tax_Amount) {
-        this.annual_Gross = annual_Gross;
-        this.sars_Bracket = sars_Bracket;
-        this.base_Value = base_Value;
-        this.threshold_Value = threshold_Value;
-        this.tax_Amount = tax_Amount;
-    }
-    //CHANGE TO USE NEW FUNCTIONS CREATED IN TABLESLEARNING
-    //CHANGES: CHANGE NAMING TO GETMINS = export class OF ITS OWN WHICH CAN BE USED IN OTHERS LIKE THRESHOLD AND REBATE
-    //calcSARSBrackets
-    execute(datastore) {
-        for (var option of SARSBrackets) {
-            if (datastore[this.annual_Gross] > option.Min && datastore[this.annual_Gross] < option.Max)  {
-                min = option.Min;
-                max = option.Max;
-                perc = option.Perc;
-            //console.log(option);
-            datastore[this.sars_Bracket] = option;
-            }
-        }
-        return datastore;
-    }
+// export class GetValue {
+//     //CHANGES: NAMING CONVENTIONS ABSTRACTION
+//     constructor (annual_Gross, sars_Bracket, base_Value, threshold_Value, tax_Amount) {
+//         this.annual_Gross = annual_Gross;
+//         this.sars_Bracket = sars_Bracket;
+//         this.base_Value = base_Value;
+//         this.threshold_Value = threshold_Value;
+//         this.tax_Amount = tax_Amount;
+//     }
+//     //CHANGE TO USE NEW FUNCTIONS CREATED IN TABLESLEARNING
+//     //CHANGES: CHANGE NAMING TO GETMINS = export class OF ITS OWN WHICH CAN BE USED IN OTHERS LIKE THRESHOLD AND REBATE
+//     //calcSARSBrackets
+//     execute(datastore) {
+//         for (var option of SARSBrackets) {
+//             if (datastore[this.annual_Gross] > option.Min && datastore[this.annual_Gross] < option.Max)  {
+//                 min = option.Min;
+//                 max = option.Max;
+//                 perc = option.Perc;
+//             //console.log(option);
+//             datastore[this.sars_Bracket] = option;
+//             }
+//         }
+//         return datastore;
+//     }
+
 //     //CHANGES: NO LONGER NEEDED AS BASE ALREADY INCPORPORATED WITH THE RUNNNG TOTALS USING MAX AND PERC
 //     //calcBaseAmount
 //     execute(datastore) {
@@ -148,7 +135,7 @@ export class GetValue {
 //         datastore[this.tax_Amount] = TAX;
 //         return datastore;
 //     }
-}
+
 
 //ADD DEANNUALISE export class.
 //CHANGES: CHANGE THE METHOD NAMES TO "EXECUTE"
