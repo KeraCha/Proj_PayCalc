@@ -1,78 +1,71 @@
-
-function calculatePercentageUsingValue(amount, table) {
-
+function calcPercentageUsingAmount(amount, table) {
   let min = 0;
   let runningTotal = 0;
 
   for (const [max, percent] of table) {
-    let percentage_idx = 0;
-    let bracket_idx = 0;
+    let multipliedValue = 0;
+    let difference = 0;
     if (amount >= min) {
       if (max === null) {
-        bracket_idx = (amount - min);
-      } else
-        if (amount > max) {
-          bracket_idx = max - min;
-        } else {
-          bracket_idx = amount - min;
-        }
-      percentage_idx = bracket_idx * percent;
+        difference = amount - min;
+      } else if (amount > max) {
+        difference = max - min;
+      } else {
+        difference = amount - min;
+      }
+      multipliedValue = difference * percent;
     }
-    runningTotal = runningTotal + percentage_idx;
+    runningTotal = runningTotal + multipliedValue;
     min = max;
   }
   return runningTotal;
 }
 
-function calcThreshold(amount, table) {
+function calcValueUsingAmount(amount, table) {
   let min = 0;
+  let thresholdValue = 0;
   for (const [max, value] of table) {
     if (amount >= min) {
       if (max === null) {
-        thresholdVal = value;
-      } else
-        if (amount > max) {
-          thresholdVal = value;
-        } else {
-          thresholdVal = value;
-        }
+        thresholdValue = value;
+      } else if (amount > max) {
+        thresholdValue = value;
+      } else {
+        thresholdValue = value;
+      }
     }
-    runningTotal = thresholdVal;
     min = max;
   }
-  return runningTotal;
+  return thresholdValue;
 }
 
-function calcRebate(amount, table) {
+//create a new function to compile the duplicated code and pass that into each that is same
+function calcSumUsingAmount(amount, table) {
   let min = 0;
   let runningTotal = 0;
+  let rebateSum;
   for (const [max, value] of table) {
     if (amount >= min) {
       if (max === null) {
-        rebateVal = value;
-      } else
-        if (amount > max) {
-          rebateVal = value;
-        } else {
-          rebateVal = value;
-        };
-      runningTotal = runningTotal + rebateVal;
-    };
+        rebateSum = value;
+      } else rebateSum = value;
+    runningTotal += rebateSum;
+    }
     min = max;
-  };
+  }
   return runningTotal;
 }
 
 export function smart_table_lookup(amount, table, style) {
-
   switch (style) {
-    case "percent":
-      return calculatePercentageUsingValue(amount, table);
-    case "sum":
-      return calcRebate(amount, table);
-    case "value":
-      return calcThreshold(amount, table);
+    case 'percent':
+      return calcPercentageUsingAmount(amount, table);
+    case 'value':
+      return calcValueUsingAmount(amount, table);
+    case 'sum':
+      return calcSumUsingAmount(amount, table);
     default:
       throw Error("Style isn't one of percent, amount, value", style);
   }
 }
+
