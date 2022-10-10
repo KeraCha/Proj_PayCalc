@@ -28,9 +28,10 @@ const UIF = [
 ];
 
 export function calculate() {
+    
     const datastore = {};
 
-    const instructions = [
+    const instructions = new cmd.Plan (
         new cmd.GetUserInput('GrossPeriodEarnings'), //ID from the HTML
         new cmd.GetUserInput('Age'), //ID from the HTML
         new cmd.GetUserInput('Periods'), //ID from the HTML
@@ -38,19 +39,19 @@ export function calculate() {
         new cmd.LookupInPercentageTable('PercentageTotal', SARSPAYE2023TAXTABLE, 'AnnualEarnings'),
         new cmd.LookupValueInTable('ThresholdValue', SARS2023THRESHOLD, 'Age'),
         new cmd.LookupSumInTable('RebateValue', SARS2023REBATE, 'Age'),
-        new cmd.LookupSumInclusion ('RebateInclusion', 'SUBTRACT', 'PercentageTotal', 'RebateValue'),
+        new cmd.Calculate('RebateInclusion', 'SUBTRACT', 'PercentageTotal', 'RebateValue'),
         new cmd.Deannualise('DeannualisedValue', 'RebateInclusion', 'Periods'),
-        new cmd.PercentageValueWithCeiling('ContributionValue','AnnualEarnings', UIF),
+        new cmd.PercentageValueWithCeiling('ContributionValue', 'AnnualEarnings', UIF),
         new cmd.NettAmount('NettValue', 'GrossPeriodEarnings', 'DeannualisedValue', 'ContributionValue')
-    ]
+    );
 
-    instructions.forEach(element => {
-        element.execute(datastore);
-    });
+    instructions.execute(datastore);
 
-  document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue.toFixed(2);
-  document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
-  document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
+    //new cmd.Plan(PayrollCommand.Plan(plannedsteps));
 
-  console.log(datastore);
+    document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue;//.toFixed(2);
+    document.getElementById('uif-result').innerHTML = datastore.ContributionValue;//.toFixed(2);
+    document.getElementById('nettpay_result').innerHTML = datastore.NettValue;//.toFixed(2);
+
+    console.log(datastore);
 }

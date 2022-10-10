@@ -69,3 +69,6 @@ export function smart_table_lookup(amount, table, style) {
   }
 }
 
+export function addition() {
+  
+}
