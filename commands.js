@@ -1,9 +1,6 @@
 import { smart_table_lookup } from './tables.js';
 
 export class PayrollCommand {
-    // constructor(inputs) {
-    //     
-    // }
     constructor() {
     }
 
@@ -176,6 +173,21 @@ export class NettAmount extends PayrollCommand {
 // }
 
 //create a command to define values for UI
+
+export class ValuesDefinedForUI {
+    constructor() {
+        super();
+        this.keyNames = this.keyNames;
+    }
+    execute(datastore) {
+        document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue.toFixed(2);
+        document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
+        document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
+        
+        datastore[this.keyNames] = parseFloat(document.getElementById(this.keyName).value);
+        return datastore;
+    }
+}
 
 export class Plan extends PayrollCommand {
     constructor(...plannedsteps) {

@@ -1,19 +1,27 @@
+const table_2 = [
+  [17712, 0.01],
+  [null, 0.0],
+];
 
-function operator(choice) {
-  let useOperator;
-  let firstValue = 10000;
-  let secondValue = 2000;
-  switch (choice) {
-    case 'ADD':
-      useOperator = '+';
-    //return datastore[this.pre_Deannualise] = datastore[this.percent_Total] + datastore[this.sum_Rebate];
-    case 'SUBTRACT':
-      useOperator = '-';
-    //return datastore[this.pre_Deannualise] = datastore[this.percent_Total] - datastore[this.sum_Rebate];
-    // default:
-    //     throw Error("Not a valid sum inclusion", this.operator);   
+function findPercentage(amount, table) {
+
+  let min = 0;
+  let runningTotal = 0;
+
+  for (const [max, percentage] of table) {
+      let greaterThanMax = amount > max;
+      let sizeOfBracket;
+
+      sizeOfBracket = greaterThanMax ? max - min : amount - min;
+      sizeOfBracket = 0;
+
+      if (amount >= min) {
+          const tax = sizeOfBracket * percentage;
+          runningTotal += tax;
+      } else {
+      }
+      min = max;
   }
-  total = firstValue, useOperator, secondValue;
-  console.log(firstValue, useOperator, secondValue, total);
+  return runningTotal;
 }
-operator('ADD');
+console.log(findPercentage(10000, table_2));

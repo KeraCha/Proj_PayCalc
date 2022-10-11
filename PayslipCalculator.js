@@ -42,16 +42,20 @@ export function calculate() {
         new cmd.Calculate('RebateInclusion', 'SUBTRACT', 'PercentageTotal', 'RebateValue'),
         new cmd.Deannualise('DeannualisedValue', 'RebateInclusion', 'Periods'),
         new cmd.PercentageValueWithCeiling('ContributionValue', 'AnnualEarnings', UIF),
-        new cmd.NettAmount('NettValue', 'GrossPeriodEarnings', 'DeannualisedValue', 'ContributionValue')
+        new cmd.NettAmount('NettValue', 'GrossPeriodEarnings', 'DeannualisedValue', 'ContributionValue'),
+        new cmd.ValuesDefinedForUI('DeannualisedValue'),
+        new cmd.ValuesDefinedForUI('ContributionValue'),
+        new cmd.ValuesDefinedForUI('NettValue')
     );
 
     instructions.execute(datastore);
 
-    //new cmd.Plan(PayrollCommand.Plan(plannedsteps));
+    document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue.toFixed(2);
+    document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
+    document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
 
-    document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue;//.toFixed(2);
-    document.getElementById('uif-result').innerHTML = datastore.ContributionValue;//.toFixed(2);
-    document.getElementById('nettpay_result').innerHTML = datastore.NettValue;//.toFixed(2);
+    // //new cmd.Plan(PayrollCommand.Plan(plannedsteps));
 
-    console.log(datastore);
+
+    // console.log(datastore);
 }
