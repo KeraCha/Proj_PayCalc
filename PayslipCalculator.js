@@ -50,12 +50,10 @@ export function calculate() {
 
     instructions.execute(datastore);
 
-    document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue.toFixed(2);
-    document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
-    document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
+    // document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue.toFixed(2);
+    // document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
+    // document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
 
-    // //new cmd.Plan(PayrollCommand.Plan(plannedsteps));
-
-
-    // console.log(datastore);
+    //new cmd.Plan(PayrollCommand.Plan(plannedsteps));
+    console.log(datastore);
 }

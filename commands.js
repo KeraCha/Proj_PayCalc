@@ -161,20 +161,10 @@ export class NettAmount extends PayrollCommand {
     }
 }
 
-// export class AddValues {
-//     constructor (total_Value, operator, Values) {
-//         this.total_Value = total_Value;
-//         this.operator = operator;
-//         this.Values = Values
-//     }
-//     execute(datastore) {
 
-//     }
-// }
+// create a command to define values for UI
 
-//create a command to define values for UI
-
-export class ValuesDefinedForUI {
+export class ValuesDefinedForUI extends PayrollCommand {
     constructor() {
         super();
         this.keyNames = this.keyNames;
@@ -184,8 +174,8 @@ export class ValuesDefinedForUI {
         document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
         document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
         
-        datastore[this.keyNames] = parseFloat(document.getElementById(this.keyName).value);
-        return datastore;
+        //datastore[this.keyNames] = parseFloat(document.getElementById(this.keyName).value);
+        //return datastore;
     }
 }
 
