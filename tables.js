@@ -7,6 +7,7 @@ function calcPercentageUsingAmount(amount, table) {
     let difference = 0;
     if (amount >= min) {
       if (max === null) {
+        //try if (!max) {
         difference = amount - min;
       } else if (amount > max) {
         difference = max - min;

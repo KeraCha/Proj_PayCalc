@@ -1,4 +1,5 @@
 import * as cmd from './commands.js';
+//try takig out the cmds all over!
 
 const SARSPAYE2023TAXTABLE = [
   [226000, 0.18],

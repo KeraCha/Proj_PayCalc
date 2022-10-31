@@ -3,7 +3,6 @@ import { smart_table_lookup } from './tables.js';
 export class PayrollCommand {
     constructor() {
     }
-
     execute(datastore) {
         throw Error("Must be implemented in derived class");
     }
@@ -160,9 +159,6 @@ export class NettAmount extends PayrollCommand {
         datastore[this.value_Nett] = datastore[this.value_For_Periods] - (datastore[this.deduction_1] + datastore[this.deduction_2]);
     }
 }
-
-
-// create a command to define values for UI
 
 export class ValuesDefinedForUI extends PayrollCommand {
     constructor() {
