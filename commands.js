@@ -3,19 +3,10 @@ import { smart_table_lookup } from './tables.js';
 export class PayrollCommand {
     constructor() {
     }
-    execute(datastore) {
+    accept(_visitor) {
+    }
+    execute() {
         throw Error("Must be implemented in derived class");
-    }
-}
-
-export class GetUserInput extends PayrollCommand {
-    constructor(keyName) {
-        super();
-        this.keyName = keyName;
-    }
-    execute(datastore) {
-        datastore[this.keyName] = parseFloat(document.getElementById(this.keyName).value);
-        return datastore;
     }
 }
 
@@ -25,6 +16,9 @@ export class Annualize extends PayrollCommand {
         this.value_Annual = value_Annual;
         this.value_For_Periods = value_For_Periods;
         this.periods = periods; 
+    }
+    accept(visitor) {
+        visitor.visit_Annualize(this);
     }
     execute(datastore) {
         datastore[this.value_Annual] = datastore[this.value_For_Periods] * datastore[this.periods];
@@ -38,6 +32,9 @@ export class LookupInPercentageTable extends PayrollCommand {
         this.percent_Total = percent_Total;
         this.table_data = table_data;
         this.value_Annual = value_Annual;
+    }
+    accept(visitor) {
+        visitor.visit_LookupInPercentageTable(this);
     }
     execute(datastore) {
         datastore[this.percent_Total] = smart_table_lookup(
@@ -56,6 +53,9 @@ export class LookupValueInTable extends PayrollCommand {
         this.table_data = table_data;
         this.input_age = input_age;
     }
+    accept(visitor) {
+        visitor.visit_LookupValueInTable(this);
+    }
     execute(datastore) {
         datastore[this.value_Threshold] = smart_table_lookup(
             datastore[this.input_age],
@@ -71,6 +71,9 @@ export class LookupSumInTable extends PayrollCommand {
         this.sum_Rebate = sum_Rebate;
         this.table_data = table_data;
         this.input_age = input_age;
+    }
+    accept(visitor) {
+        visitor.visit_LookupSumInTable(this);
     }
     execute(datastore) {
         datastore[this.sum_Rebate] = smart_table_lookup(
@@ -89,6 +92,9 @@ export class Calculate extends PayrollCommand {
         this.operator = operator;
         this.value_1 = value_1;
         this.value_2 = value_2;
+    }
+    accept(visitor) {
+        visitor.visit_Calculate(this);
     }
     //can return a lambda that returns two values for the operator
     execute(datastore) {
@@ -124,6 +130,9 @@ export class Deannualise extends PayrollCommand {
         this.pre_Value = pre_Value;
         this.periods = periods;
     }
+    accept(visitor) {
+        visitor.visit_Deannualise(this);
+    }
     execute(datastore) {
         datastore[this.value_current_period] = datastore[this.pre_Value] / datastore[this.periods];
         return datastore;
@@ -136,6 +145,9 @@ export class PercentageValueWithCeiling extends PayrollCommand {
         this.contribution = contribution;
         this.value_Apply = value_Apply;
         this.table_data = table_data;
+    }
+    accept(visitor) {
+        visitor.visit_PercentageValueWithCeiling(this);
     }
     execute(datastore) {
         datastore[this.contribution] = smart_table_lookup(
@@ -155,36 +167,32 @@ export class NettAmount extends PayrollCommand {
         this.deduction_1 = deduction_1;
         this.deduction_2 = deduction_2;
     }
+    accept(visitor) {
+        visitor.visit_NettAmount(this);
+    }
     execute(datastore) {
         datastore[this.value_Nett] = datastore[this.value_For_Periods] - (datastore[this.deduction_1] + datastore[this.deduction_2]);
     }
 }
 
-export class ValuesDefinedForUI extends PayrollCommand {
-    constructor() {
-        super();
-        this.keyNames = this.keyNames;
-    }
-    execute(datastore) {
-        document.getElementById("paye-result").innerHTML = datastore.DeannualisedValue.toFixed(2);
-        document.getElementById('uif-result').innerHTML = datastore.ContributionValue.toFixed(2);
-        document.getElementById('nettpay_result').innerHTML = datastore.NettValue.toFixed(2);
-        
-        //datastore[this.keyNames] = parseFloat(document.getElementById(this.keyName).value);
-        //return datastore;
-    }
-}
 
 export class Plan extends PayrollCommand {
     constructor(...plannedsteps) {
         super ();
         this.plannedsteps = plannedsteps;
     }
-
+    accept(visitor) {
+        visitor.enter_Plan(this);
+        for (let steps of this.plannedsteps) {
+            steps.accept(visitor);
+        }
+        visitor.exit_Plan(this);
+        return visitor;
+    }
     execute(datastore) {
-
-        this.plannedsteps.forEach(element => {
-            element.execute(datastore);
+        this.plannedsteps.forEach(steps => {
+            steps.execute(datastore);
         });
+        return datastore;
     }
 }
