@@ -1,75 +1,93 @@
-function calcPercentageUsingAmount(amount, table) {
+//Calculate tax amount
+function calculatePercentage(amount, table) {
   let min = 0;
-  let runningTotal = 0;
+  let total = 0;
+  
+  for (const [max, value] of table) {
 
-  for (const [max, percent] of table) {
-    let multipliedValue = 0;
-    let difference = 0;
+    //assign diff
+    let diff;
     if (amount >= min) {
-      if (max === null) {
-        //try if (!max) {
-        difference = amount - min;
-      } else if (amount > max) {
-        difference = max - min;
+      if (max !== null && amount > max) {
+        diff = max - min;
       } else {
-        difference = amount - min;
+        diff = amount - min;
       }
-      multipliedValue = difference * percent;
+    } else {
+      diff = 0;
     }
-    runningTotal = runningTotal + multipliedValue;
+
+    const percAmount = diff * value;
+    total = percAmount + total;
     min = max;
   }
-  return runningTotal;
+
+  return total;
 }
 
-function calcValueUsingAmount(amount, table) {
+//calculate rebate
+function calculateSum(amount, table) {
   let min = 0;
-  let thresholdValue = 0;
+  let total = 0;
+  let result;
+
   for (const [max, value] of table) {
     if (amount >= min) {
-      if (max === null) {
-        thresholdValue = value;
-      } else if (amount > max) {
-        thresholdValue = value;
-      } else {
-        thresholdValue = value;
+      result = value;
+    } else {
+      result = 0;
+    }
+    if (result <= 0) {
+      break;
+    }
+    total = result + total;
+    min = max;
+  }
+  return total;
+}
+
+//calculate threshold
+function calculateValue(amount, table) {
+  let min = 0;
+  let result;
+
+  for (const [max, value] of table) {
+    if (max != null) {
+      if (amount >= min && amount < max) {
+        result = value;
+      }
+    } else {
+      if (amount >= min) {
+        result = value;
       }
     }
     min = max;
   }
-  return thresholdValue;
+  return result;
 }
 
-//create a new function to compile the duplicated code and pass that into each that is same
-function calcSumUsingAmount(amount, table) {
-  let min = 0;
-  let runningTotal = 0;
-  let rebateSum;
-  for (const [max, value] of table) {
-    if (amount >= min) {
-      if (max === null) {
-        rebateSum = value;
-      } else rebateSum = value;
-    runningTotal += rebateSum;
-    }
-    min = max;
-  }
-  return runningTotal;
+export function commaSeperator(amount) {
+  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 export function smart_table_lookup(amount, table, style) {
   switch (style) {
-    case 'percent':
-      return calcPercentageUsingAmount(amount, table);
-    case 'value':
-      return calcValueUsingAmount(amount, table);
-    case 'sum':
-      return calcSumUsingAmount(amount, table);
+    case "percent":
+      return calculatePercentage(amount, table);
+    case "sum":
+      return calculateSum(amount, table);
+    case "value":
+      return calculateValue(amount, table);
     default:
       throw Error("Style isn't one of percent, amount, value", style);
   }
 }
 
-export function addition() {
-  
+export function add() {
+  let sum = 0;
+  for (const item of arguments[0]) {
+    sum += parseFloat(item);
+  }
+  return sum;
 }
+

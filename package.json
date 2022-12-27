@@ -1,13 +1,20 @@
 {
-    "name": "Proj_PayCalc",
-    "version": "1.0.0",
-    "description": "",
-    "main": "Untitled-1.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "type": "module"
-  }
-  
+  "name": "combined_taxcalc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wave3Project/EPI-C_tax_calculator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wave3Project/EPI-C_tax_calculator/issues"
+  },
+  "homepage": "https://github.com/Wave3Project/EPI-C_tax_calculator#readme",
+  "type": "module"
+}
