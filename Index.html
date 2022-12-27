@@ -6,8 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayCalc</title>
-    <!-- <link rel ="stylesheet" href="style.css"> -->
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel ="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -30,12 +29,22 @@
     </div>
 
     <script type="module">
-        import { uxElementsIn, uxElementsOut } from "./index.js";
+        import { buildHTML, createDatastore, outputHTML } from "./index.js";
+        import { getPlan } from './plan.js';
+        
+        const plan = await getPlan();
+        buildHTML(plan, 'inputID');
+        //console.table(plan);
+//can use a pretty printer to check if the code works up until here
 
-        uxElementsIn();
 
         document.getElementById("calculate").addEventListener("click", () => {
-            outputID.innerHTML = "", uxElementsOut();
+
+            outputID.innerHTML = "";
+            const data = createDatastore(plan);
+            console.log(data);
+            plan.execute(data);
+            outputHTML(plan, data, 'outputID');
         });
 
     </script>

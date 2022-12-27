@@ -1,19 +1,20 @@
 export class BaseVisitor {
-    constructor () {}
 
-    visit_uxInput(o) {}
-    visit_uxOutput(o) {}
-    visit_ReceiveInput(o) {}
-    visit_Annualize(o) {}
-    visit_LookupInPercentageTable(o) {}
-    visit_LookupValueInTable(o) {}
-    visit_LookupSumInTable(o) {}
-    visit_Calculate(o) {}
-    visit_Deannualise(o) {}
-    visit_PercentageValueWithCeiling(o) {}
-    visit_NettAmount(o) {}
-    
+    visit_DefineInput(o) { }
+    visit_DefineOutput(o) { }
+    visit_ReceiveInput(o) { }
 
-    enter_Plan() {}
-    exit_Plan() {}
+    visit_Annualize(o) { }
+    visit_PercentageTable(o) { }
+    visit_ValueTable(o) { }
+    visit_SumTable(o) { }
+    visit_Calculate(o) { }
+    visit_Deannualize(o) { }
+    visit_Deductions(o) { }
+    visit_Nett(o) { }
+    visit_AsyncVisitor(o) { }
+    visit_LoadTable(o) { }
+
+    enter_Plan(o) { }
+    exit_Plan(o) { }
 }
